@@ -153,3 +153,118 @@ def plot_rsi_normative(
         print(f"Plot saved to: {png_file.resolve()}")
 
     plt.show()
+
+def plot_rsi_comparison(df, save=False, output_dir="results"):
+    """
+    Compare RSI_Peak and RSI_Flight across all trials and subjects.
+
+    Args:
+        df (pd.DataFrame): Combined results DataFrame.
+        save (bool): If True, saves the figure as PNG.
+        output_dir (str): Path to save the plot.
+    """
+
+    # Melt the DataFrame for plotting
+    df_melt = df.melt(
+        id_vars=["Subject", "Trial", "Limb"],
+        value_vars=["RSI_Flight", "RSI_Peak"],
+        var_name="RSI_Method",
+        value_name="RSI_Value"
+    )
+
+    plt.figure(figsize=(10, 6))
+    sns.pointplot(
+        data=df_melt,
+        x="Subject",
+        y="RSI_Value",
+        hue="RSI_Method",
+        dodge=0.3,
+        errorbar=("ci", 95),
+        join=False,
+        markers=["o", "s"],
+        scale=1.3,
+        linewidth=1.5,
+        palette=["#eb811b", "#4ea72e"]
+    )
+
+    plt.title("Comparison of RSI_Peak and RSI_Flight Across Subjects", fontsize=14, weight="bold")
+    plt.xlabel("Subject")
+    plt.ylabel("Reactive Strength Index (RSI)")
+    plt.grid(True, linestyle="--", alpha=0.6)
+    plt.legend(title="RSI Method", loc="upper right", fontsize=10, title_fontsize=11)
+    plt.tight_layout()
+
+    if save:
+        from datetime import datetime
+        import os
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        os.makedirs(output_dir, exist_ok=True)
+        png_file = os.path.join(output_dir, f"rsi_comparison_{timestamp}.png")
+        plt.savefig(png_file, dpi=300)
+        print(f"Plot saved to: {png_file}")
+
+    plt.show()
+
+def plot_asymmetry_by_subject(df, save=False, output_dir="results"):
+    """
+    Create a subject-wise Asymmetry_% point plot with 95% CI and off-centre median labels.
+    """
+
+    # Filter for combined limb results only
+    df_combined = df[df["Limb"] == "Combined"].copy()
+
+    # Initialize figure
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    # Point plot (thin, dark teal)
+    sns.pointplot(
+        data=df_combined,
+        x="Subject",
+        y="Asymmetry_Peak%",
+        errorbar=("ci", 95),
+        color="#eb811b",
+        markers="o",
+        scale=1.2,
+        join=False,
+        ax=ax,
+        linewidth=0.8
+    )
+
+    # Compute and annotate median values per subject (offset to avoid occlusion)
+    medians = df_combined.groupby("Subject")["Asymmetry_Peak%"].median().reset_index()
+    for i, row in medians.iterrows():
+        ax.text(
+            i + 0.35, 
+            row["Asymmetry_Peak%"] + 0.5,  # offset vertically
+            f"{row['Asymmetry_Peak%']:.1f}%", 
+            ha="right", 
+            va="top", 
+            fontsize=9,
+            color="#eb811b",
+            fontweight="bold"
+        )
+
+    # Aesthetic adjustments
+    ax.set_title("Jump Asymmetry by Subject", fontsize=14, fontweight="bold", color="#273a3d", pad=15)
+    ax.set_xlabel("Subject", fontsize=12, color="#273a3d")
+    ax.set_ylabel("Asymmetry (%)", fontsize=12, color="#273a3d")
+    ax.grid(True, linestyle="--", alpha=0.3)
+    sns.despine()
+
+    # Tight layout
+    plt.tight_layout()
+
+    # Save plot with timestamp
+    if save:
+        from datetime import datetime
+        import os
+
+        os.makedirs(output_dir, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"asymmetry_by_subject_{timestamp}.png"
+        path = os.path.join(output_dir, filename)
+        plt.savefig(path, dpi=300, bbox_inches="tight")
+        print(f"Plot saved to: {path}")
+
+    plt.show()

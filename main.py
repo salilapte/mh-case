@@ -19,7 +19,7 @@ Run in terminal:
 
 # Import pipeline
 from src.rsi_analysis_pipeline import batch_process
-from src.plots import plot_gct_vs_peakheight, plot_rsi_normative
+from src.plots import plot_gct_vs_peakheight, plot_rsi_normative, plot_rsi_comparison, plot_asymmetry_by_subject
 from datetime import datetime
 import os
 
@@ -42,3 +42,5 @@ print(results.head())
 # After generating results DataFrame
 plot_gct_vs_peakheight(results, save=True)
 plot_rsi_normative(results, save=True)
+plot_rsi_comparison(results,save=True)
+plot_asymmetry_by_subject(results,save=True)
