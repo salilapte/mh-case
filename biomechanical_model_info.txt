@@ -1,0 +1,20 @@
+# Body kinematics
+3D cartesian positions of body frames expressed in the world frame.
+Each header is structured as: bodyName_Side_coordinate
+_tx - x-position
+_ty - y-position
+_tz - z_position
+_r - right side
+_l - left side
+
+# Generalized coordinates
+Most headers exactly correspond to the kinematic degree of freedom 
+that can be found in the model description (https://modelhealth.notion.site/Musculoskeletal-model-22b67c127383804d918fddf2baec47fd).
+Some mappings here to avoid any confusion:
+knee_angle - knee flexion/extension
+mtp_angle - metatarsophalangeal joint (toe joint), can be ignored
+sh_tx, sh_ty, sh_tz - translational degree of freedom in the scapulothoracic joint (shoulder joint)
+sh_plane_elev - shoulder plane elevation
+sh_elev - shoulder elevation
+sh_axial_rot - shoulder axial rotation
+pro_sup - forearm pronation-supination

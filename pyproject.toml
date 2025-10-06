@@ -1,0 +1,32 @@
+[project]
+name = "mh_case"
+version = "0.1.0"
+description = "Analysis of marker data for RSI"
+readme = "README.md"
+requires-python = ">=3.10,<3.11"
+dependencies = [
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "scipy",
+    "ipykernel>=6.30.1",
+    "plotly>=6.3.1",
+    "nbformat>=5.10.4",
+    "ruff>=0.13.3",
+    "seaborn>=0.13.2",
+]
+
+# -----------------------------
+# Ruff configuration
+# -----------------------------
+[tool.ruff]
+# Maximum line length (PEP8 recommends 79, Black uses 88)
+line-length = 88
+
+[tool.ruff.lint]
+# Select which rules to check
+# Codes to select; E = errors, F = pyflakes, W = warnings
+select = ["E", "F", "W"]
+
+# Exclude irrelevant files/folders
+exclude = ["__pycache__", "build", "dist", ".venv", "Data"]
