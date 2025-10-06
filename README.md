@@ -15,7 +15,6 @@
 7. [Outputs](#outputs)  
 8. [Plotting](#plotting)  
 9. [References](#references)  
-10. [License](#license)  
 
 ---
 
